@@ -1,0 +1,23 @@
+{
+  "name": "bridge.io-client",
+  "version": "1.0.0",
+  "description": "The client-side implementation of Bridge.IO",
+  "main": "dist/bridge.io.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "realtime",
+    "socket",
+    "websocket",
+    "tcp",
+    "framework",
+    "bridge.io"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hossein-zare/bridge.io-client.git"
+  },
+  "author": "Hossein Zare",
+  "license": "MIT"
+}

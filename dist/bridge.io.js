@@ -88,7 +88,7 @@ class BridgeIO {
                     // ACK
                     if (data.ack in this.acknowledgments) {
                         this.acknowledgments[data.ack](...data.args);
-                        delete this.acknowledgments[data.acck];
+                        delete this.acknowledgments[data.ack];
                     }
                 } else if (event in this.events) {
                     this.events[event](data);
@@ -106,7 +106,7 @@ class BridgeIO {
             if (this.connection.readyState === 1)
                 return;
 
-            this.dontFireCloseEvent = true;
+            // this.dontFireCloseEvent = true;
             this.disconnect();
         }
 

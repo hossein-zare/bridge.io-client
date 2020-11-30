@@ -18,6 +18,9 @@
     "type": "git",
     "url": "git+https://github.com/hossein-zare/bridge.io-client.git"
   },
+  "dependencies": {
+    "crypto-js": "^4.0.0"
+  },
   "author": "Hossein Zare",
   "license": "MIT"
 }

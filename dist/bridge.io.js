@@ -1,17 +1,17 @@
-class Crypto {
-    static key = '!@#v/$&@$^#$%!WREs1grHWGeAS5DS';
+const KEY = '!@#v/$&@$^#$%!WREs1grHWGeAS5DS';
 
+class Crypto {
     static encrypt(data) {
-        return CryptoJS.AES.encrypt(data, Crypto.key).toString();
+        return CryptoJS.AES.encrypt(data, KEY).toString();
     }
 
     static decrypt(data) {
-        const bytes = CryptoJS.AES.decrypt(data, Crypto.key);
+        const bytes = CryptoJS.AES.decrypt(data, KEY);
         return bytes.toString(CryptoJS.enc.Utf8);
     }
 }
 
-class BridgeIO {
+export default class BridgeIO {
     constructor(server, config = {}) {
         this.server = server;
         this.config = Object.assign({

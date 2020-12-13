@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 const KEY = '!@#v/$&@$^#$%!WREs1grHWGeAS5DS';
 
 class Crypto {

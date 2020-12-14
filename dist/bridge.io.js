@@ -30,9 +30,10 @@ export default class BridgeIO {
         this.acknowledgments = {};
         this.events = {
             open: () => {},
+            connection_ready: () => {},
             close: () => {},
             reconnecting: () => {},
-            reconnected: () => {}
+            reconnected: () => {},
         };
     }
 
@@ -85,13 +86,17 @@ export default class BridgeIO {
                     event = null,
                     data = null
                 } = json;
-                
+
                 if (event === 'ack' && this.isObject(data) && data.ack && Array.isArray(data.args)) {
                     // ACK
                     if (data.ack in this.acknowledgments) {
                         this.acknowledgments[data.ack](...data.args);
                         delete this.acknowledgments[data.ack];
                     }
+                } else if (event === 'ready') {
+                    
+                    // READY
+                    this.events.connection_ready(this.opened);
                 } else if (event in this.events) {
                     this.events[event](data);
                 }

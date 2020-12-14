@@ -24,6 +24,7 @@ export default class BridgeIO {
         this.connection = null;
         this.opened = false;
         this.attempts = 0;
+        this.successfulAttempts = 0;
         this.disconnected = false;
         this.dontFireCloseEvent = false;
         this.casterId = 400;
@@ -55,6 +56,7 @@ export default class BridgeIO {
             }
 
             this.attempts = 0;
+            this.successfulAttempts++;
             this.heartbeat();
         });
 
@@ -94,9 +96,8 @@ export default class BridgeIO {
                         delete this.acknowledgments[data.ack];
                     }
                 } else if (event === 'ready') {
-                    
                     // READY
-                    this.events.connection_ready(this.opened);
+                    this.events.connection_ready(this.successfulAttempts > 1);
                 } else if (event in this.events) {
                     this.events[event](data);
                 }

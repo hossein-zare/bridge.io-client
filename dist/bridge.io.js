@@ -29,6 +29,7 @@ export default class BridgeIO {
         this.dontFireCloseEvent = false;
         this.casterId = 400;
         this.acknowledgments = {};
+        this.ready = false;
         this.events = {
             open: () => {},
             connection_ready: () => {},
@@ -62,6 +63,7 @@ export default class BridgeIO {
 
         // Close
         this.connection.addEventListener('close', (e) => {
+            this.ready = false;
             clearTimeout(this.connection.pingTimeout);
 
             if (! this.dontFireCloseEvent)
@@ -79,7 +81,7 @@ export default class BridgeIO {
         this.connection.addEventListener('message', (e) => {
             if (e.data === '9') {
                 // Ping
-                this.connection.send(10);
+                this.connection.send('10');
                 this.heartbeat();
             } else {
                 const decrypted = Crypto.decrypt(e.data);
@@ -97,6 +99,7 @@ export default class BridgeIO {
                     }
                 } else if (event === 'ready') {
                     // READY
+                    this.ready = true;
                     this.events.connection_ready(this.successfulAttempts > 1);
                 } else if (event in this.events) {
                     this.events[event](data);

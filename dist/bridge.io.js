@@ -32,7 +32,8 @@ class BridgeIO extends EventEmitter {
 
         this.socket = null;
         this.rpcId = 0;
-        this.callbacks = {};
+        this.responseCallbacks = {};
+        this.errorCallbacks = {};
         this.rpcTimeouts = {};
         this.reconnectionAttempts = 0;
         this.reconnectionInterval = null;
@@ -124,10 +125,28 @@ class BridgeIO extends EventEmitter {
     rpc(message) {
         const [event, data, id] = message;
 
-        if (this.callbacks[id]) {
-            this.callbacks[id](data);
-            clearTimeout(this.rpcTimeouts[id]);
+        if (Object.prototype.toString.call(data) === "[object Object]") {
+            if (data.hasOwnProperty('status') && Number.isInteger(data.status) && data.status >= 400) {
+                if (this.errorCallbacks[id]) {
+                    this.errorCallbacks[id](data);
+                }
+            } else {
+                if (this.responseCallbacks[id]) {
+                    this.responseCallbacks[id](data);
+                }
+            }
+        } else {
+            if (this.responseCallbacks[id]) {
+                this.responseCallbacks[id](data);
+            }
         }
+        
+        if (this.responseCallbacks[id])
+            delete this.responseCallbacks[id];
+        if (this.errorCallbacks[id])
+            delete this.errorCallbacks[id];
+
+        clearTimeout(this.rpcTimeouts[id]);
     }
 
     serializeMessage(event, data, id) {
@@ -139,16 +158,26 @@ class BridgeIO extends EventEmitter {
         return message;
     }
 
-    cast(event, data = null, callback = null) {
+    cast(event, data = null, responseCallback = null, errorCallback = null, config = {}) {
         let id;
 
-        if (callback) {
+        config = Object.assign({
+            timeout: this.opt.response_timeout
+        }, config);
+
+        if (responseCallback) {
             id = ++this.rpcId;
 
-            this.callbacks[id] = callback;
+            this.responseCallbacks[id] = responseCallback;
+            this.errorCallbacks[id] = errorCallback;
             this.rpcTimeouts[id] = setTimeout(() => {
-               delete this.callbacks[id]; 
-            }, this.opt.response_timeout);
+                delete this.responseCallbacks[id];
+
+                if (this.errorCallbacks[id]) {
+                    this.errorCallbacks[id](null); // timeout
+                    delete this.errorCallbacks[id];
+                }
+            }, config.timeout);
         }
 
         const message = this.serializeMessage(event, data, id);

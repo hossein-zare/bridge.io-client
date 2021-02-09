@@ -17,7 +17,7 @@ class EventEmitter {
     }
 }
 
-class BridgeIO extends EventEmitter {
+export default class BridgeIO extends EventEmitter {
     constructor(opt) {
         super();
 

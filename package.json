@@ -1,6 +1,6 @@
 {
   "name": "bridge.io-client",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "The client-side implementation of Bridge.IO",
   "main": "dist/bridge.io.js",
   "types": "index.d.ts",

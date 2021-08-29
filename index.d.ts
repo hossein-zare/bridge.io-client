@@ -5,7 +5,8 @@ declare class BridgeIO {
   constructor(config?: Partial<BridgeIO.Config>);
 
   on(event: BridgeIO.EventName, callback: BridgeIO.EventCallback): void;
-  on(event: "connection", callback: BridgeIO.ConnectedEventCallback): void;
+  on(event: "connection", callback: BridgeIO.ConnectionEventCallback): void;
+  on(event: string, callback: BridgeIO.MessageEventCallback): void;
 }
 
 declare namespace BridgeIO {
@@ -18,7 +19,8 @@ declare namespace BridgeIO {
     reconnection: boolean;
   }
 
-  type EventName = "connection" | "disconnected" | "reconnecting" | "reconnection" | "error" | string;
+  type EventName = "connection" | "disconnected" | "reconnecting" | "reconnection" | "error";
   type EventCallback = (e: Event) => void;
-  type ConnectedEventCallback = (e: Event, reconnected: boolean) => void;
+  type ConnectionEventCallback = (e: Event, reconnected: boolean) => void;
+  type MessageEventCallback = (data: any) => void;
 }

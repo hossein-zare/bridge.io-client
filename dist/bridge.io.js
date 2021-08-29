@@ -18,7 +18,7 @@ class EventEmitter {
 }
 
 export default class BridgeIO extends EventEmitter {
-    constructor(opt) {
+    constructor(opt = {}) {
         super();
 
         this.opt = Object.assign({

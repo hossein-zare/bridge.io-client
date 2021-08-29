@@ -4,7 +4,7 @@ The client-side implementation of Bridge.IO
 ## Usage
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bridge.io-client@2.0.7/dist/bridge.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bridge.io-client@2.0.8/dist/bridge.io.min.js"></script>
 ```
 
 ### NPM

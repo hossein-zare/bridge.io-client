@@ -7,7 +7,7 @@ declare class BridgeIO {
   on(event: BridgeIO.EventName, callback: BridgeIO.EventCallback): void;
   on(event: "connection", callback: BridgeIO.ConnectionEventCallback): void;
   on(event: string, callback: BridgeIO.MessageEventCallback): void;
-  cast(event: string, data?: any, response?: BridgeIO.ResponseCallback, errorCalback?: BridgeIO.ErrorConfig, config?: Partial<BridgeIO.CastConfig>)
+  cast(event: string, data?: any, response?: BridgeIO.ResponseCallback, errorCalback?: BridgeIO.ErrorCallback, config?: Partial<BridgeIO.CastConfig>)
 }
 
 declare namespace BridgeIO {
@@ -26,7 +26,7 @@ declare namespace BridgeIO {
   type MessageEventCallback = (data: any) => void;
 
   type ResponseCallback = (result: any) => void;
-  type ErrorConfig = (error: any | null) => void;
+  type ErrorCallback = (error: any | null) => void;
   
   interface CastConfig {
     timeout: number;

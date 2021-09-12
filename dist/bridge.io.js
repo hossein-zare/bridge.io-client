@@ -167,11 +167,17 @@ export default class BridgeIO extends EventEmitter {
             this.responseCallbacks[id] = responseCallback;
             this.errorCallbacks[id] = errorCallback;
             this.rpcTimeouts[id] = setTimeout(() => {
-                delete this.responseCallbacks[id];
+                if (this.responseCallbacks[id]) {
+                    delete this.responseCallbacks[id];
+                }
 
                 if (this.errorCallbacks[id]) {
                     this.errorCallbacks[id](null); // timeout
                     delete this.errorCallbacks[id];
+                }
+
+                if (this.rpcTimeouts[id]) {
+                    delete this.rpcTimeouts[id];
                 }
             }, config.timeout);
         }
@@ -179,6 +185,22 @@ export default class BridgeIO extends EventEmitter {
         const message = this.serializeMessage(event, data, id);
 
         this.socket.send(message);
+
+        return id;
+    }
+
+    revoke(id) {
+        if (this.responseCallbacks[id]) {
+            delete this.responseCallbacks[id];
+        }
+
+        if (this.errorCallbacks[id]) {
+            delete this.errorCallbacks[id];
+        }
+
+        if (this.rpcTimeouts[id]) {
+            delete this.rpcTimeouts[id];
+        }
     }
 
     isReadyFlag(data) {
